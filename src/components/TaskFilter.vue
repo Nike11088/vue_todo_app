@@ -34,9 +34,7 @@ interface State {
   filters: Filter[]
 }
 
-
 export default defineComponent({ 
-  //text-white  bg-blue-600 hover:bg-blue-500 
   props: {
     activeFilter: {
       type: String as PropType<Filter>
