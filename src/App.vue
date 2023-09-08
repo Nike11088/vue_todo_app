@@ -1,16 +1,38 @@
-<script setup lang="ts">
+<script lang="ts">
 import 'material-icons/iconfont/material-icons.css'
+import TaskFilter from './components/TaskFilter.vue'
+import { defineComponent } from 'vue'
+import { Filter } from './types/Filter';
+
+interface State {
+  activeFilter: Filter
+}
+
+export default defineComponent({
+  components: {
+    TaskFilter
+  },
+  data () : State {
+    return {
+      activeFilter: 'All'
+    }
+  },
+  methods: {
+    setFilter (filter : Filter) {
+      this.activeFilter = filter
+    }
+  }
+})
 </script>
 
 <template>
   <div class="flex justify-center min-w-[350px] max-w-[550px] mx-auto max-h-screen">
     <div class="flex flex-col items-center px-[10px]">    
 
-      <div class="flex justify-between items-center w-[330px] h-[40px] mt-5">
-        <button class="w-[110px] h-[40px] rounded-l-full text-white border-2 border-blue-700 border-r-0 bg-blue-600 hover:bg-blue-500 font-medium">All</button>
-        <button class="w-[110px] border-2 h-[40px] text-blue-600 font-medium border-lr-2 border-blue-700 hover:bg-blue-300">Active</button>
-        <button class="w-[110px] h-[40px] rounded-r-full text-blue-600 font-medium border-l-0 border-2 border-blue-700 hover:bg-blue-300">Done</button>
-      </div> 
+      <TaskFilter 
+        :activeFilter="activeFilter" 
+        @setFilter="setFilter"
+      />
 
       <div class="flex flex-col items-center mt-10 max-w-[530px] overflow-y-auto">
         <div class="flex justify-between items-center border-2 border-blue-700 rounded-xl w-full p-2 mb-4">
