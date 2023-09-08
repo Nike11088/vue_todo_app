@@ -1,161 +1,65 @@
+<script setup lang="ts">
+import 'material-icons/iconfont/material-icons.css'
+</script>
+
 <template>
-  <!-- <Header /> -->
-  <div class="container" >
-    <div class="add-todo-container">
-      <input 
-        v-model="newTodo" 
-        type="text" 
-        class="add-todo-input"
-      >
-      <button class="add-btn" @click="addTodo">Добавить</button>
-    </div>
-    <div class="filter-container">
-      <button class="filter-btn" @click="() => changeFilter('all')">Все</button>
-      <button class="filter-btn" @click="() => changeFilter('active')">Активные</button>
-      <button class="filter-btn" @click="() => changeFilter('completed')">Завершённые</button>
-    </div>  
-    <div class="list-container">
-      <ul v-for="todo in filteredTodos">
-        <li :key="todo.id">
-          <div class="todo-item">
-            <div 
-              :class="{'completed': todo.completed}"
-              class="todo-item__text"
-            >
-              {{ todo.text }}        
-            </div>
-            <div class="todo-item__buttons">
-              <button v-if="!todo.completed" @click="() => completeTodo(todo.id)">Завершить</button>
-              <button v-else @click="() => startTodo(todo.id)">Возобновить</button>
-              <button @click="() => deleteTodo(todo.id)">Удалить</button>
-            </div>           
-          </div>        
-        </li>
-      </ul>
-    </div>   
+  <div class="flex justify-center min-w-[350px] max-w-[550px] mx-auto max-h-screen">
+    <div class="flex flex-col items-center px-[10px]">    
+
+      <div class="flex justify-between items-center w-[330px] h-[40px] mt-5">
+        <button class="w-[110px] h-[40px] rounded-l-full text-white border-2 border-blue-700 border-r-0 bg-blue-600 hover:bg-blue-500 font-medium">All</button>
+        <button class="w-[110px] border-2 h-[40px] text-blue-600 font-medium border-lr-2 border-blue-700 hover:bg-blue-300">Active</button>
+        <button class="w-[110px] h-[40px] rounded-r-full text-blue-600 font-medium border-l-0 border-2 border-blue-700 hover:bg-blue-300">Done</button>
+      </div> 
+
+      <div class="flex flex-col items-center mt-10 max-w-[530px] overflow-y-auto">
+        <div class="flex justify-between items-center border-2 border-blue-700 rounded-xl w-full p-2 mb-4">
+          <div class="flex items-center">
+            <span class="material-icons-round !text-3xl mr-1 text-green-400 hover:text-green-600 hover:cursor-pointer">done</span>             
+            <span>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ut consequuntur suscipit non eveniet consectetur ad obcaecati cupiditate amet esse provident.</span>
+          </div>         
+          <span class="material-icons-outlined !text-3xl ml-1 text-red-400  hover:text-red-600 hover:cursor-pointer">delete</span>  
+        </div>
+        <div class="flex justify-between items-center border-2 border-blue-700 rounded-xl w-full p-2 mb-4">
+          <div class="flex items-center">
+            <span class="material-icons-round !text-3xl mr-1 text-green-400 hover:text-green-600 hover:cursor-pointer">done</span>             
+            <span>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ut consequuntur suscipit non eveniet consectetur ad obcaecati cupiditate amet esse provident.</span>
+          </div>         
+          <span class="material-icons-outlined !text-3xl ml-1 text-red-400  hover:text-red-600 hover:cursor-pointer">delete</span>  
+        </div>
+        <div class="flex justify-between items-center border-2 border-blue-700 rounded-xl w-full p-2 mb-4">
+          <div class="flex items-center">
+            <span class="material-icons-round !text-3xl mr-1 text-green-400 hover:text-green-600 hover:cursor-pointer">done</span>             
+            <span>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ut consequuntur suscipit non eveniet consectetur ad obcaecati cupiditate amet esse provident.</span>
+          </div>         
+          <span class="material-icons-outlined !text-3xl ml-1 text-red-400  hover:text-red-600 hover:cursor-pointer">delete</span>  
+        </div>
+        <div class="flex justify-between items-center border-2 border-blue-700 rounded-xl w-full p-2 mb-4">
+          <div class="flex items-center">
+            <span class="material-icons-round !text-3xl mr-1 text-green-400 hover:text-green-600 hover:cursor-pointer">done</span>             
+            <span>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ut consequuntur suscipit non eveniet consectetur ad obcaecati cupiditate amet esse provident.</span>
+          </div>         
+          <span class="material-icons-outlined !text-3xl ml-1 text-red-400  hover:text-red-600 hover:cursor-pointer">delete</span>  
+        </div>  
+      </div>              
+
+      <div class="my-5">
+        <button class="w-[110px] h-[40px] rounded-full text-white border-2 border-blue-700 bg-blue-600 hover:bg-blue-500 font-medium">Add Task</button>
+      </div>
+
+      <div class="flex flex-col border-2 border-blue-700 rounded-xl mt-5 mb-5 w-full p-3 pt-1">
+        <div class="flex justify-end mb-3">
+          <span class="material-icons-round !text-3xl ml-1 text-blue-600  hover:text-blue-400 hover:cursor-pointer">cancel</span>  
+        </div>        
+        <input class="border-2 border-blue-300 focus:border-blue-600 outline-0 rounded-full w-full mb-5">  
+        <div class="flex justify-center">
+          <button class="w-[110px] h-[40px] rounded-full text-white border-2 border-blue-700 bg-blue-600 hover:bg-blue-500 font-medium">Add Task</button>       
+        </div>        
+      </div>
+
+    </div>     
   </div>
 </template>
 
-<script>
-import Header from './components/Header.vue'
-
-export default {
-  name: 'App',
-  components: {
-    Header
-  },
-  data() {
-    return {
-      newTodo: '',
-      todos: [],
-      filter: 'all',
-      localStorageTodosItemName: 'vue-todos-app__todos'
-    }
-  },
-  mounted () {
-    let todos = localStorage.getItem(this.localStorageTodosItemName)
-    if (todos) {
-      this.todos = JSON.parse(todos)
-    }
-  },  
-  methods: {
-    addTodo () {
-      this.newTodo = this.newTodo.trim()
-      if (this.newTodo !== '') {
-        this.todos = [...this.todos, { id: Date.now(), text: this.newTodo, completed: false }]     
-      }
-      this.newTodo = ''        
-    },
-    changeFilter (filter) {
-      this.filter = filter
-    },
-    completeTodo (id) {
-      const todo = this.todos.find(t => t.id === id)
-      todo.completed = true 
-      this.todos = [...this.todos]    
-    },
-    deleteTodo (id) {
-      this.todos = this.todos.filter(t => t.id !== id)
-    },
-    startTodo (id) {
-      const todo = this.todos.find(t => t.id === id)
-      todo.completed = false 
-      this.todos = [...this.todos]   
-    }
-  },
-  watch: {
-    todos () {
-      console.warn('watch')
-      localStorage.setItem(this.localStorageTodosItemName, JSON.stringify(this.todos)) 
-    }
-  },
-  computed: {
-    filteredTodos () {
-      if (this.filter === 'all') return this.todos
-      if (this.filter === 'active') return this.todos.filter(t => !t.completed)
-      if (this.filter === 'completed') return this.todos.filter(t => t.completed)
-    }
-  }
-};
-</script>
-
-<style>
-* {  
-  margin: 0;
-  box-sizing: border-box;
-  list-style-type: none;
-  font-family: "Roboto", "-apple-system", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 14pt;
-}
-ul, li {
-  padding: 0;
-}
-.container {
-  width: 600px;
-  margin: auto;
-  padding: 20px;
-}
-.add-todo-input {
-  width: 100%;
-  padding: 5px;
-  margin-right: 10px;
-}
-.add-btn {
-  width: 128px;
-}
-.add-todo-container {
-  display: flex;  
-}
-.filter-container {
-  margin-top: 20px;
-  display: flex; 
-  justify-content: center;
-}
-.filter-btn {
-  margin-right: 5px;
-}
-.list-container {
-  margin-top: 20px;
-  height: calc(100vh - 194px);
-  overflow-y: auto;
-}
-.todo-item {
-  display: flex;  
-  padding: 5px 0;
-  justify-content: space-between;
-}
-.todo-item__text {
-  width: 250px;
-  text-wrap: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-}
-.todo-item__text.completed {
-  text-decoration: line-through;
-}
-.todo-item__buttons button {
-  width: 128px;
-  margin-left: 5px;
-}
+<style scoped>
 </style>
-
