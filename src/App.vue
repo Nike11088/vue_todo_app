@@ -2,7 +2,7 @@
 import 'material-icons/iconfont/material-icons.css'
 import TaskFilter from './components/TaskFilter.vue'
 import { defineComponent } from 'vue'
-import { Filter } from './types/Filter';
+import { type Filter } from './types/Filter';
 
 interface State {
   activeFilter: Filter
