@@ -12,7 +12,7 @@
 
 <script lang="ts">
 import TaskItem from './TaskItem.vue'
-import { PropType, defineComponent } from 'vue';
+import { type PropType, defineComponent } from 'vue';
 import { type Task } from '../types/Task';
 
 export default defineComponent({ 

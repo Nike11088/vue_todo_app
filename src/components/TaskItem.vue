@@ -6,11 +6,11 @@
     <div class="flex items-center hover:cursor-pointer">
       <span 
         class="material-icons-round !text-3xl mr-1 text-green-400 hover:text-green-600"
-        :class="{'collapse': task.completed}"
+        :class="{'collapse': task?.completed}"
       >
         done
       </span>             
-      <span>{{ task.text }}</span>
+      <span>{{ task?.text }}</span>
     </div>         
     <span 
       class="material-icons-outlined !text-3xl ml-1 text-red-400 hover:text-red-600 hover:cursor-pointer"
@@ -22,7 +22,7 @@
 </template>
 
 <script lang="ts">
-import { PropType, defineComponent } from 'vue';
+import { type PropType, defineComponent } from 'vue';
 import { type Task } from '../types/Task';
 
 export default defineComponent({ 
