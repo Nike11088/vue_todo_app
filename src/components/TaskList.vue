@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col items-center mt-10 max-w-[530px] overflow-y-auto">
+  <div class="mt-10 sm:w-[550px] w-full px-[10px]">
 
    <TaskItem 
     v-for="task in tasks"

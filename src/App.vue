@@ -1,51 +1,53 @@
 <template>
-  <div class="flex justify-center min-w-[350px] max-w-[550px] mx-auto max-h-screen">
-    <div class="flex flex-col items-center px-[10px]">    
+  <div class="flex flex-col items-center min-w-[350px]">    
 
-      <TaskFilter 
-        :activeFilter="activeFilter" 
-        @setFilter="setFilter"
-      />
+    <TaskFilter 
+      :activeFilter="activeFilter" 
+      @setFilter="setFilter"
+    />
 
-      <TaskList
-        :tasks="tasks"
-      />             
+    <TaskList
+      :tasks="tasks"
+    />        
+    
+    <AddTaskButton 
+      v-if="!addTaskFormVisible"
+      class="mt-10" 
+      @click="showAddTaskForm"
+    />
 
-      <div class="my-5">
-        <button class="w-[110px] h-[40px] rounded-full text-white border-2 border-blue-700 bg-blue-600 hover:bg-blue-500 font-medium">Add Task</button>
-      </div>
+    <AddTaskForm 
+      class="mt-10" 
+      :visible="addTaskFormVisible" 
+      @close="closeAddTaskForm"
+      @addTask="addTask"
+    />
 
-      <div class="flex flex-col border-2 border-blue-700 rounded-xl mt-5 mb-5 w-full p-3 pt-1">
-        <div class="flex justify-end mb-3">
-          <span class="material-icons-round !text-3xl ml-1 text-blue-600  hover:text-blue-400 hover:cursor-pointer">cancel</span>  
-        </div>        
-        <input class="border-2 border-blue-300 focus:border-blue-600 outline-0 rounded-full w-full mb-5">  
-        <div class="flex justify-center">
-          <button class="w-[110px] h-[40px] rounded-full text-white border-2 border-blue-700 bg-blue-600 hover:bg-blue-500 font-medium">Add Task</button>       
-        </div>        
-      </div>
-
-    </div>     
-  </div>
+  </div> 
 </template>
 
 <script lang="ts">
 import 'material-icons/iconfont/material-icons.css'
 import TaskFilter from './components/TaskFilter.vue'
 import TaskList from './components/TaskList.vue'
+import AddTaskButton from './components/AddTaskButton.vue'
+import AddTaskForm from './components/AddTaskForm.vue'
 import { defineComponent } from 'vue'
 import { type Filter } from './types/Filter';
 import { type Task } from './types/Task';
 
 interface State {
   activeFilter: Filter,
-  tasks: Task[]
+  tasks: Task[],
+  addTaskFormVisible: boolean
 }
 
 export default defineComponent({
   components: {
     TaskFilter,
-    TaskList
+    TaskList,
+    AddTaskButton,
+    AddTaskForm
   },
   data () : State {
     return {
@@ -54,12 +56,27 @@ export default defineComponent({
         { id: 0, text: 'Learn the basics of Vue', completed: true },
         { id: 1, text: 'Learn the basics of Typescript', completed: false },
         { id: 2, text: 'Subscribe to the channel', completed: false },
-      ]
+      ],
+      addTaskFormVisible: false
     }
   },
   methods: {
     setFilter (filter : Filter) {
       this.activeFilter = filter
+    },
+    showAddTaskForm () {
+      this.addTaskFormVisible = true
+    },
+    closeAddTaskForm () {
+      this.addTaskFormVisible = false
+    },
+    addTask (text) {
+      const newTask = {
+        id: Date.now(),
+        text,
+        completed: false
+      }
+      this.tasks.push(newTask)
     }
   }
 })

@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-between items-center border-2 border-blue-700 rounded-xl min-w-[330px] w-full p-2 mb-4"
+  <div class="flex justify-between items-center border-2 border-blue-700 rounded-xl w-full mb-4"
     @mouseover="mouseOver"
     @mouseleave="mouseLeave"
   >
