@@ -70,7 +70,7 @@ export default defineComponent({
     closeAddTaskForm () {
       this.addTaskFormVisible = false
     },
-    addTask (text) {
+    addTask (text: string) {
       const newTask = {
         id: Date.now(),
         text,
