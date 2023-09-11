@@ -7,7 +7,7 @@
     />
 
     <TaskList
-      v-if="tasks.length > 0"
+      v-if="filteredTasks.length > 0"
       :tasks="filteredTasks"
       @complete="completeTask"
       @delete="deleteTask"
