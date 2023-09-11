@@ -63,6 +63,7 @@ export default defineComponent({
       this.deleteVisible = true
     },
     mouseLeave () {
+      if (this.isMobile()) return
       this.completeVisible = false
       this.deleteVisible = false
     },    
