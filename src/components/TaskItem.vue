@@ -9,7 +9,6 @@
     >
       <div class="flex items-center w-[30px] h-[30px] mr-1">
         <span 
-          ref="completeIcon"
           v-if="completeVisible || task?.completed "
           class="material-icons-round !text-3xl text-green-400 hover:text-green-600"              
         >
@@ -24,7 +23,6 @@
     </div> 
     <div class="flex items-center w-[30px] h-[30px] mr-1">
       <span  
-        ref="deleteIcon"
         v-if="deleteVisible"
         class="material-icons-outlined !text-3xl ml-1 text-red-400 hover:text-red-600 hover:cursor-pointer"
         @click="deleteTask"
@@ -71,7 +69,6 @@ export default defineComponent({
       this.$emit('complete', this.task.id)
     },
     deleteTask () {
-      if (!this.$refs.deleteIcon.classList.contains('!visible')) return
       this.$emit('delete', this.task.id)
     },
     isMobile () {
