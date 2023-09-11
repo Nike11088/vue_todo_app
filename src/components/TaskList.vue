@@ -5,6 +5,8 @@
     v-for="task in tasks"
     :key="task.id"
     :task="task"
+    @complete="completeTask"
+    @delete="deleteTask"
    />
 
   </div> 
@@ -25,6 +27,18 @@ export default defineComponent({
       default: () => []
     }
   },
+  methods: {
+    completeTask (id: number) {
+      this.$emit('complete', id)
+    },
+    deleteTask (id: number) {
+      this.$emit('delete', id)
+    }
+  },
+  emits: {
+    complete: (id: number) => Number.isInteger(id),
+    delete: (id: number) => Number.isInteger(id)
+  }
 })
 </script>
 

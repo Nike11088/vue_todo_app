@@ -8,7 +8,7 @@
         <span class="material-icons-round !text-3xl ml-1 text-blue-600 hover:text-blue-400 hover:cursor-pointer">cancel</span>  
       </div>        
       <input 
-        class="border-2 border-blue-300 focus:border-blue-600 outline-0 rounded-full w-full mb-5"
+        class="border-2 border-blue-300 focus:border-blue-600 outline-0 rounded-full w-full mb-5 px-2"
         v-model="taskText"
       > 
       <div class="flex justify-center">

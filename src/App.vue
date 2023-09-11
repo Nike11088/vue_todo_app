@@ -7,17 +7,21 @@
     />
 
     <TaskList
-      :tasks="tasks"
+      v-if="tasks.length > 0"
+      :tasks="filteredTasks"
+      @complete="completeTask"
+      @delete="deleteTask"
     />        
+    <div v-else class="mt-10 font-bold text-gray-400">Task list is empty</div>
     
     <AddTaskButton 
       v-if="!addTaskFormVisible"
-      class="mt-10" 
+      class="mt-8" 
       @click="showAddTaskForm"
     />
 
     <AddTaskForm 
-      class="mt-10" 
+      class="mt-8" 
       :visible="addTaskFormVisible" 
       @close="closeAddTaskForm"
       @addTask="addTask"
@@ -42,6 +46,9 @@ interface State {
   addTaskFormVisible: boolean
 }
 
+const appName = 'todo-app'
+const tasksName = 'tasks'
+
 export default defineComponent({
   components: {
     TaskFilter,
@@ -49,14 +56,16 @@ export default defineComponent({
     AddTaskButton,
     AddTaskForm
   },
+  created () {
+    const tasks = localStorage.getItem(`${appName}.${tasksName}`)
+    if (tasks) {
+      this.tasks = JSON.parse(tasks)
+    } 
+  },
   data () : State {
     return {
       activeFilter: 'All',
-      tasks: [
-        { id: 0, text: 'Learn the basics of Vue', completed: true },
-        { id: 1, text: 'Learn the basics of Typescript', completed: false },
-        { id: 2, text: 'Subscribe to the channel', completed: false },
-      ],
+      tasks: [],
       addTaskFormVisible: false
     }
   },
@@ -77,6 +86,30 @@ export default defineComponent({
         completed: false
       }
       this.tasks.push(newTask)
+      localStorage.setItem(`${appName}.${tasksName}`, JSON.stringify(this.tasks))
+    },
+    completeTask (id: number) {
+      const task = this.tasks.find(t => t.id === id) 
+      if (!task) return     
+      task.completed = !task.completed
+      localStorage.setItem(`${appName}.${tasksName}`, JSON.stringify(this.tasks))
+    },
+    deleteTask (id: number) {
+      this.tasks = this.tasks.filter(t => t.id !== id)
+      localStorage.setItem(`${appName}.${tasksName}`, JSON.stringify(this.tasks))
+    }
+  },
+  computed: {
+    filteredTasks () {
+      switch (this.activeFilter) {       
+        case 'Active':
+          return this.tasks.filter(t => !t.completed)
+        case 'Done':
+          return this.tasks.filter(t => t.completed)
+        case 'All':
+        default:
+          return this.tasks
+      }
     }
   }
 })
