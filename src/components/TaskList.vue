@@ -5,6 +5,10 @@
     v-for="task in tasks"
     :key="task.id"
     :task="task"
+    :selected="selected === task.id"
+    @taskMouseEnter="taskMouseEnter"
+    @taskMouseLeave="taskMouseLeave"
+    @clickTask="clickTask"
     @complete="completeTask"
     @delete="deleteTask"
    />
@@ -17,6 +21,8 @@ import TaskItem from './TaskItem.vue'
 import { type PropType, defineComponent } from 'vue';
 import { type Task } from '../types/Task';
 
+type Nullable<T> = T | null
+
 export default defineComponent({ 
   components: {
     TaskItem
@@ -25,17 +31,33 @@ export default defineComponent({
     tasks: {
       type: Array as PropType<Task[]>,
       default: () => []
+    },
+    selected: {
+      type: Number as PropType<Nullable<number>>,
+      default: null
     }
   },
   methods: {
+    clickTask (id: number) {
+      this.$emit('clickTask', id)
+    },
     completeTask (id: number) {
       this.$emit('complete', id)
     },
     deleteTask (id: number) {
       this.$emit('delete', id)
+    },
+    taskMouseEnter (id: number) {
+      this.$emit('taskMouseEnter', id)
+    },
+    taskMouseLeave (id: number) {
+      this.$emit('taskMouseLeave', id)
     }
   },
   emits: {
+    taskMouseEnter: (id: number) => Number.isInteger(id),
+    taskMouseLeave: (id: number) => Number.isInteger(id),
+    clickTask: (id: number) => Number.isInteger(id),
     complete: (id: number) => Number.isInteger(id),
     delete: (id: number) => Number.isInteger(id)
   }

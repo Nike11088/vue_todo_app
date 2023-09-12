@@ -1,5 +1,8 @@
 <template>
-  <div class="flex flex-col items-center min-w-[350px]">    
+  <div 
+    class="flex flex-col items-center min-w-[350px]"
+    @click="containerClick"
+  >    
 
     <TaskFilter 
       :activeFilter="activeFilter" 
@@ -9,8 +12,12 @@
     <TaskList
       v-if="filteredTasks.length > 0"
       :tasks="filteredTasks"
+      :selected="selected"
+      @clickTask="clickTask"
       @complete="completeTask"
       @delete="deleteTask"
+      @taskMouseEnter="taskMouseEnter"
+      @taskMouseLeave="taskMouseLeave"
     />        
     <div v-else class="mt-10 font-bold text-gray-400">Task list is empty</div>
     
@@ -37,13 +44,16 @@ import TaskList from './components/TaskList.vue'
 import AddTaskButton from './components/AddTaskButton.vue'
 import AddTaskForm from './components/AddTaskForm.vue'
 import { defineComponent } from 'vue'
-import { type Filter } from './types/Filter';
-import { type Task } from './types/Task';
+import { type Filter } from './types/Filter'
+import { type Task } from './types/Task'
+
+type Nullable<T> = T | null
 
 interface State {
   activeFilter: Filter,
   tasks: Task[],
-  addTaskFormVisible: boolean
+  addTaskFormVisible: boolean,
+  selected: Nullable<number>
 }
 
 const appName = 'todo-app'
@@ -66,7 +76,8 @@ export default defineComponent({
     return {
       activeFilter: 'All',
       tasks: [],
-      addTaskFormVisible: false
+      addTaskFormVisible: false,
+      selected: null
     }
   },
   methods: {
@@ -88,6 +99,12 @@ export default defineComponent({
       this.tasks.push(newTask)
       localStorage.setItem(`${appName}.${tasksName}`, JSON.stringify(this.tasks))
     },
+    clickTask (id: number) {         
+      if (this.isMobile()) {
+        const selected = this.tasks.find(t => t.id === id)?.id || null
+        this.selected = this.selected === selected ? null : selected
+      }      
+    },
     completeTask (id: number) {
       const task = this.tasks.find(t => t.id === id) 
       if (!task) return     
@@ -97,6 +114,29 @@ export default defineComponent({
     deleteTask (id: number) {
       this.tasks = this.tasks.filter(t => t.id !== id)
       localStorage.setItem(`${appName}.${tasksName}`, JSON.stringify(this.tasks))
+    },
+    taskMouseEnter (id: number) {
+      if (!this.isMobile()) {
+        const selected = this.getTaskId(id)
+        this.selected = this.selected === selected ? null : selected
+      }      
+    },
+    taskMouseLeave () {      
+      if (!this.isMobile()) {
+        this.selected = null
+      } 
+    },
+    containerClick (evt: MouseEvent) {
+      const target = evt.target as Element;
+      if (this.isMobile() && !target.classList.contains('task-item')) {
+        this.selected = null
+      }
+    },
+    getTaskId (id: number) {
+      return this.tasks.find(t => t.id === id)?.id || null
+    },
+    isMobile () {
+      return /Android|iPhone/i.test(navigator.userAgent)
     }
   },
   computed: {
