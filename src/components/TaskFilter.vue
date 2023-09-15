@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="flex justify-between items-center w-[330px] h-[40px] mt-5">
+    <div class="flex justify-between items-center w-[330px] h-[40px]">
       <button 
         class="w-[110px] h-[40px] text-blue-600 font-medium border-2 border-blue-700 rounded-l-full border-r-0 active:bg-none hover:bg-blue-300"  
         :class="{ 'text-white bg-blue-600 hover:bg-blue-500': activeFilter === 'All' }"  

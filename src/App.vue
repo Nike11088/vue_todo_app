@@ -3,10 +3,17 @@
     class="flex flex-col items-center min-w-[350px] h-100vh"
     @click="containerClick"
   >    
-    <TaskFilter 
-      :activeFilter="activeFilter" 
-      @setFilter="setFilter"
-    />
+    <div class="flex items-center mt-5 relative">
+      <TaskFilter 
+        :activeFilter="activeFilter" 
+        @setFilter="setFilter"
+      />  
+      <LampIcon 
+        class="absolute top-[4px] right-[-40px] cursor-pointer" 
+        :color="themeColor"
+        @click="switchTheme"
+      />       
+    </div>  
 
     <TaskList
       v-if="filteredTasks.length > 0"
@@ -44,6 +51,8 @@ import AddTaskForm from './components/AddTaskForm.vue'
 import { defineComponent } from 'vue'
 import { type Filter } from './types/Filter'
 import { type Task } from './types/Task'
+import LampIcon from './components/icons/LampIcon.vue'
+import 'material-icons/iconfont/material-icons.css'
 
 type Nullable<T> = T | null
 
@@ -51,7 +60,8 @@ interface State {
   activeFilter: Filter,
   tasks: Task[],
   addTaskFormVisible: boolean,
-  selected: Nullable<number>
+  selected: Nullable<number>,
+  darkTheme: boolean
 }
 
 const appName = 'todo-app'
@@ -62,7 +72,8 @@ export default defineComponent({
     TaskFilter,
     TaskList,
     AddTaskButton,
-    AddTaskForm
+    AddTaskForm,
+    LampIcon
   },
   created () {
     const tasks = localStorage.getItem(`${appName}.${tasksName}`)
@@ -75,7 +86,8 @@ export default defineComponent({
       activeFilter: 'All',
       tasks: [],
       addTaskFormVisible: false,
-      selected: null
+      selected: null,
+      darkTheme: false
     }
   },
   methods: {
@@ -135,6 +147,9 @@ export default defineComponent({
     },
     isMobile () {
       return /Android|iPhone/i.test(navigator.userAgent)
+    },
+    switchTheme () {
+      this.darkTheme = !this.darkTheme
     }
   },
   computed: {
@@ -148,6 +163,9 @@ export default defineComponent({
         default:
           return this.tasks
       }
+    },
+    themeColor () {
+      return this.darkTheme ? 'text-amber-300' : 'text-slate-500'
     }
   }
 })
