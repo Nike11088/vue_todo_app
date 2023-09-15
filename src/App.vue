@@ -1,9 +1,8 @@
 <template>
   <div 
-    class="flex flex-col items-center min-w-[350px]"
+    class="flex flex-col items-center min-w-[350px] h-100vh"
     @click="containerClick"
   >    
-
     <TaskFilter 
       :activeFilter="activeFilter" 
       @setFilter="setFilter"
@@ -33,7 +32,6 @@
       @close="closeAddTaskForm"
       @addTask="addTask"
     />
-
   </div> 
 </template>
 
