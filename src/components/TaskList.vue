@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-10 sm:w-[550px] w-full px-[10px] max-h-[calc(100vh-310px)] overflow-y-auto">
+  <div class="mt-10 sm:w-[550px] w-full px-[10px] max-h-[calc(100vh-310px)] scrollbar">
 
    <TaskItem 
     v-for="task in tasks"
