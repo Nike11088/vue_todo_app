@@ -66,6 +66,7 @@ interface State {
 
 const appName = 'todo-app'
 const tasksName = 'tasks'
+const themeName = 'theme'
 
 export default defineComponent({
   components: {
@@ -76,6 +77,14 @@ export default defineComponent({
     LampIcon
   },
   created () {
+    if (localStorage['todo-app.theme'] === 'dark' || (localStorage[`${appName}.${themeName}`] !== 'light' && (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches))) {
+      document.documentElement.classList.add('dark')
+      this.darkTheme = true
+    } else {
+      document.documentElement.classList.remove('dark')
+      this.darkTheme = false
+    }
+
     const tasks = localStorage.getItem(`${appName}.${tasksName}`)
     if (tasks) {
       this.tasks = JSON.parse(tasks)
@@ -149,7 +158,15 @@ export default defineComponent({
       return /Android|iPhone/i.test(navigator.userAgent)
     },
     switchTheme () {
-      this.darkTheme = !this.darkTheme
+      if (this.darkTheme) {
+        document.documentElement.classList.remove('dark')
+        localStorage.setItem(`${appName}.${themeName}`, 'light')
+        this.darkTheme = false
+      } else {
+        document.documentElement.classList.add('dark')
+        localStorage.setItem(`${appName}.${themeName}`, 'dark')
+        this.darkTheme = true
+      }
     }
   },
   computed: {
@@ -165,7 +182,7 @@ export default defineComponent({
       }
     },
     themeColor () {
-      return this.darkTheme ? 'text-amber-300' : 'text-slate-500'
+      return this.darkTheme ? 'text-amber-300' : 'text-slate-600'
     }
   }
 })

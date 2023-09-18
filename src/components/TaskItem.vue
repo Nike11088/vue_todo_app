@@ -1,6 +1,6 @@
 <template>
   <div 
-    class="task-item flex justify-between items-center border-2 border-blue-700 rounded-xl w-full py-1 px-2 mb-2"
+    class="task-item flex justify-between items-center border-2 border-blue-700 rounded-xl w-full py-1 px-2 mb-2 text-black dark:text-white"
     @mouseenter="mouseEnter"    
     @mouseleave="mouseLeave"   
     @click="clickTask" 
