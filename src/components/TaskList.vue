@@ -1,18 +1,16 @@
 <template>
   <div class="mt-10 sm:w-[550px] w-full px-[10px] max-h-[calc(100vh-310px)] scrollbar">
-
-   <TaskItem 
-    v-for="task in tasks"
-    :key="task.id"
-    :task="task"
-    :selected="selected === task.id"
-    @taskMouseEnter="taskMouseEnter"
-    @taskMouseLeave="taskMouseLeave"
-    @clickTask="clickTask"
-    @complete="completeTask"
-    @delete="deleteTask"
-   />
-
+    <TaskItem 
+      v-for="task in tasks"
+      :key="task.id"
+      :task="task"
+      :selected="selected === task.id"
+      @taskMouseEnter="taskMouseEnter"
+      @taskMouseLeave="taskMouseLeave"
+      @clickTask="clickTask"
+      @complete="completeTask"
+      @delete="deleteTask"
+    />
   </div> 
 </template>
 

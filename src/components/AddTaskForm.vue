@@ -46,6 +46,7 @@ export default defineComponent({
       this.$emit('close')
     },
     addTask () {
+      if (this.taskText === '') return
       this.$emit('addTask', this.taskText)
       this.taskText = ''
     }
