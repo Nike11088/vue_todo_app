@@ -24,6 +24,11 @@
       @delete="deleteTask"
       @taskMouseEnter="taskMouseEnter"
       @taskMouseLeave="taskMouseLeave"
+      @taskMouseDown="taskMouseDown"
+      @taskMouseUp="taskMouseUp"
+      @taskMouseMove="taskMouseMove"
+      @taskTouchStart="taskTouchStart"
+      @taskTouchMove="taskTouchMove"
     />        
     <div v-else class="mt-10 font-bold text-gray-400">Task list is empty</div>
     
@@ -53,6 +58,8 @@ import { type Filter } from './types/Filter'
 import { type Task } from './types/Task'
 import LampIcon from './components/icons/LampIcon.vue'
 import 'material-icons/iconfont/material-icons.css'
+import { type TaskMouseEventArg } from './types/TaskMouseEventArg'
+import { type TaskTouchEventArg } from './types/TaskTouchEventArg'
 
 type Nullable<T> = T | null
 
@@ -61,7 +68,9 @@ interface State {
   tasks: Task[],
   addTaskFormVisible: boolean,
   selected: Nullable<number>,
-  darkTheme: boolean
+  darkTheme: boolean,
+  taskTouchEvent: TaskTouchEventArg,
+  isTaskMouseDown: boolean
 }
 
 const appName = 'todo-app'
@@ -96,7 +105,9 @@ export default defineComponent({
       tasks: [],
       addTaskFormVisible: false,
       selected: null,
-      darkTheme: false
+      darkTheme: false,
+      taskTouchEvent: null,
+      isTaskMouseDown: false
     }
   },
   methods: {
@@ -118,11 +129,16 @@ export default defineComponent({
       this.tasks.push(newTask)
       localStorage.setItem(`${appName}.${tasksName}`, JSON.stringify(this.tasks))
     },
-    clickTask (id: number) {         
+    clickTask (id: number) {     
       if (this.isMobile()) {
-        const selected = this.tasks.find(t => t.id === id)?.id || null
-        this.selected = this.selected === selected ? null : selected
-      }      
+        if (this.selected === id) {
+          this.selected = null
+        } else {
+          this.completeTask(id)
+        }
+      } else {
+        this.completeTask(id)
+      }     
     },
     completeTask (id: number) {
       const task = this.tasks.find(t => t.id === id) 
@@ -144,6 +160,22 @@ export default defineComponent({
       if (!this.isMobile()) {
         this.selected = null
       } 
+    },
+    taskMouseDown (eventArg: TaskMouseEventArg) {
+    }, 
+    taskMouseUp (eventArg: TaskMouseEventArg) {   
+      
+    }, 
+    taskMouseMove (eventArg: TaskMouseEventArg) {
+    },
+    taskTouchStart (event: TaskTouchEventArg) {
+      this.taskTouchEvent = event
+    },
+    taskTouchMove (eventArg: TaskTouchEventArg) {   
+      if (this.taskTouchEvent && this.taskTouchEvent?.id === eventArg.id &&
+          eventArg.event.changedTouches[0].clientX - this.taskTouchEvent.event.changedTouches[0].clientX > 50) {
+        this.selected = this.getTaskId(eventArg.id)
+      }    
     },
     containerClick (evt: MouseEvent) {
       const target = evt.target as Element;
