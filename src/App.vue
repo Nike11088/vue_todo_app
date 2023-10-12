@@ -69,7 +69,7 @@ interface State {
   addTaskFormVisible: boolean,
   selected: Nullable<number>,
   darkTheme: boolean,
-  taskTouchEvent: TaskTouchEventArg,
+  taskTouchEvent: Nullable<TaskTouchEventArg>,
   isTaskMouseDown: boolean
 }
 
