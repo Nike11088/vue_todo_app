@@ -18,8 +18,7 @@
       >
         <span 
           v-if="task?.completed"
-          class="material-icons-round !text-3xl text-green-400 cursor-default"  
-          @click.stop="completeTask"            
+          class="material-icons-round !text-3xl text-green-400 cursor-pointer"            
         >
           done
         </span> 
