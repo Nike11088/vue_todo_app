@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-10 sm:w-[550px] w-full px-[10px] max-h-[calc(100vh-310px)] scrollbar">
+  <div ref="taskList" class="mt-10 sm:w-[550px] w-full px-[10px] max-h-[calc(100vh-310px)] scrollbar">
     <TaskItem 
       v-for="task in tasks"
       :key="task.id"
@@ -28,6 +28,11 @@ import { type TaskTouchEventArg } from '../types/TaskTouchEventArg'
 
 type Nullable<T> = T | null
 
+interface State {
+  tasksLength: Number,
+  isTaskAdded: Boolean
+}
+
 export default defineComponent({ 
   components: {
     TaskItem
@@ -40,6 +45,33 @@ export default defineComponent({
     selected: {
       type: Number as PropType<Nullable<number>>,
       default: null
+    }
+  },
+  data () : State {
+    return {
+      tasksLength: 0,
+      isTaskAdded: false
+    }
+  },
+  mounted () {
+    this.oldTaskLength = this.tasks.length   
+    this.tasksLength = this.tasks.length   
+  },
+  updated () {
+    if (this.isTaskAdded) {
+      this.isTaskAdded = false
+      this.$refs.taskList.scrollTop = this.$refs.taskList.scrollHeight
+    }    
+  },
+  watch: {
+    tasks: {
+      handler: function () {
+        if (this.tasks.length > this.tasksLength) {
+          this.isTaskAdded = true
+        }     
+        this.tasksLength = this.tasks.length   
+      },
+      deep: true
     }
   },
   methods: {

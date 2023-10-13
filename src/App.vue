@@ -127,7 +127,7 @@ export default defineComponent({
         completed: false
       }
       this.tasks.push(newTask)
-      localStorage.setItem(`${appName}.${tasksName}`, JSON.stringify(this.tasks))
+      localStorage.setItem(`${appName}.${tasksName}`, JSON.stringify(this.tasks))   
     },
     clickTask (id: number) {     
       if (this.isMobile()) {
@@ -161,17 +161,11 @@ export default defineComponent({
         this.selected = null
       } 
     },
-    taskMouseDown (eventArg: TaskMouseEventArg) {
-      // this.taskTouchEvent = event
+    taskMouseDown (eventArg: TaskMouseEventArg) {      
     }, 
-    taskMouseUp (eventArg: TaskMouseEventArg) {   
-      
+    taskMouseUp (eventArg: TaskMouseEventArg) {  
     }, 
     taskMouseMove (eventArg: TaskMouseEventArg) {
-      // if (this.taskTouchEvent && this.taskTouchEvent?.id === eventArg.id &&
-      //     eventArg.clientX - this.taskTouchEvent.clientX > 50) {
-      //   this.selected = this.getTaskId(eventArg.id)
-      // } 
     },
     taskTouchStart (event: TaskTouchEventArg) {      
       this.taskTouchEvent = event
