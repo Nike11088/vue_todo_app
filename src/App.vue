@@ -1,6 +1,6 @@
 <template>
   <div 
-    class="flex flex-col items-center min-w-[350px] h-100vh"
+    class="flex flex-col items-center min-w-[350px] h-[100vh]"
     @click="containerClick"
   >    
     <div class="flex items-center mt-5 relative">
@@ -150,7 +150,7 @@ export default defineComponent({
       this.tasks = this.tasks.filter(t => t.id !== id)
       localStorage.setItem(`${appName}.${tasksName}`, JSON.stringify(this.tasks))
     },
-    taskMouseEnter (id: number) {
+    taskMouseEnter (id: number) {     
       if (!this.isMobile()) {
         const selected = this.getTaskId(id)
         this.selected = this.selected === selected ? null : selected
@@ -162,13 +162,18 @@ export default defineComponent({
       } 
     },
     taskMouseDown (eventArg: TaskMouseEventArg) {
+      // this.taskTouchEvent = event
     }, 
     taskMouseUp (eventArg: TaskMouseEventArg) {   
       
     }, 
     taskMouseMove (eventArg: TaskMouseEventArg) {
+      // if (this.taskTouchEvent && this.taskTouchEvent?.id === eventArg.id &&
+      //     eventArg.clientX - this.taskTouchEvent.clientX > 50) {
+      //   this.selected = this.getTaskId(eventArg.id)
+      // } 
     },
-    taskTouchStart (event: TaskTouchEventArg) {
+    taskTouchStart (event: TaskTouchEventArg) {      
       this.taskTouchEvent = event
     },
     taskTouchMove (eventArg: TaskTouchEventArg) {   

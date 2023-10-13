@@ -1,6 +1,6 @@
 <template>
   <div 
-    class="task-item flex justify-between items-center border-2 border-blue-700 rounded-xl w-full py-1 px-2 mb-2 text-black dark:text-white"
+    class="task-item flex justify-between items-center border-2 border-blue-700 rounded-xl w-full py-1 px-2 mb-2 text-black dark:text-white cursor-pointer"
     @mouseenter="mouseEnter"    
     @mouseleave="mouseLeave"   
     @mousedown="mouseDown($event)"
@@ -18,14 +18,14 @@
       >
         <span 
           v-if="task?.completed"
-          class="material-icons-round !text-3xl text-green-400 hover:text-green-600 cursor-pointer"  
+          class="material-icons-round !text-3xl text-green-400 cursor-default"  
           @click.stop="completeTask"            
         >
           done
         </span> 
       </div>                    
       <span
-        class="cursor-default"
+        class="cursor-pointer"
         :class="{'line-through': task.completed}"        
       >
         {{ task.text }}
@@ -83,7 +83,7 @@ export default defineComponent({
       this.$emit('taskTouchMove', { id: this.task.id, event })
     },
     completeTask () {    
-      this.$emit('complete', this.task.id)
+      // this.$emit('complete', this.task.id)
     },
     deleteTask () {
       this.$emit('delete', this.task.id)
