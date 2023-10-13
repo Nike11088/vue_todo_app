@@ -33,7 +33,7 @@
     <div class="flex items-center w-[30px] h-[30px] mr-1">
       <span  
         v-if="selected"
-        class="material-icons-outlined !text-3xl ml-1 text-red-400 hover:text-red-600 cursor-pointer"
+        class="material-icons-outlined !text-3xl ml-1 hover:text-red-400 text-red-600 cursor-pointer"
         @click.stop="deleteTask"
       >
         delete
