@@ -29,8 +29,8 @@ import { type TaskTouchEventArg } from '../types/TaskTouchEventArg'
 type Nullable<T> = T | null
 
 interface State {
-  tasksLength: Number,
-  isTaskAdded: Boolean
+  tasksLength: number,
+  isTaskAdded: boolean
 }
 
 export default defineComponent({ 
@@ -53,20 +53,20 @@ export default defineComponent({
       isTaskAdded: false
     }
   },
-  mounted () {
-    this.oldTaskLength = this.tasks.length   
+  mounted () { 
     this.tasksLength = this.tasks.length   
   },
   updated () {
     if (this.isTaskAdded) {
       this.isTaskAdded = false
-      this.$refs.taskList.scrollTop = this.$refs.taskList.scrollHeight
+      const el = this.$refs.taskList as HTMLElement
+      el.scrollTop = el.scrollHeight
     }    
   },
   watch: {
     tasks: {
       handler: function () {
-        if (this.tasks.length > this.tasksLength) {
+        if (this.tasks?.length > this.tasksLength) {
           this.isTaskAdded = true
         }     
         this.tasksLength = this.tasks.length   
