@@ -1,10 +1,18 @@
 <template>
-  <div ref="taskList" class="mt-10 sm:w-[550px] w-full px-[10px] max-h-[calc(100vh-310px)] scrollbar">
+  <div 
+    ref="taskList" class="mt-10 sm:w-[550px] w-full px-[10px] max-h-[calc(100vh-310px)] scrollbar"
+   
+  >
     <TaskItem 
       v-for="task in tasks"
       :key="task.id"
       :task="task"
       :selected="selected === task.id"
+      draggable="true"
+      @dragstart="dragStart($event, task)"
+      @drop="drop($event, task)"
+      @dragover.prevent
+      @dragenter.prevent
       @taskMouseEnter="taskMouseEnter"
       @taskMouseLeave="taskMouseLeave"
       @taskMouseDown="taskMouseDown"
@@ -25,6 +33,7 @@ import { type PropType, defineComponent } from 'vue'
 import { type Task } from '../types/Task'
 import { type TaskMouseEventArg } from '../types/TaskMouseEventArg'
 import { type TaskTouchEventArg } from '../types/TaskTouchEventArg'
+import { type TaskDragEvent } from '../types/TaskDragEvent'
 
 type Nullable<T> = T | null
 
@@ -54,7 +63,7 @@ export default defineComponent({
     }
   },
   mounted () { 
-    this.tasksLength = this.tasks.length   
+    this.tasksLength = this.tasks.length 
   },
   updated () {
     if (this.isTaskAdded) {
@@ -69,7 +78,7 @@ export default defineComponent({
         if (this.tasks?.length > this.tasksLength) {
           this.isTaskAdded = true
         }     
-        this.tasksLength = this.tasks.length   
+        this.tasksLength = this.tasks.length  
       },
       deep: true
     }
@@ -105,6 +114,12 @@ export default defineComponent({
     taskTouchMove (event: TaskTouchEventArg) {
       this.$emit('taskTouchMove', event)
     },
+    dragStart (event: DragEvent, task: Task) {
+      this.$emit('taskDragStart', { event, task })
+    },
+    drop (event: DragEvent, task: Task) {
+      this.$emit('taskDrop', { event, task })
+    }
   },
   emits: {
     taskMouseEnter: (id: number) => Number.isInteger(id),
@@ -114,6 +129,8 @@ export default defineComponent({
     taskMouseMove: (eventArg: TaskMouseEventArg) => eventArg,
     taskTouchStart: (eventArg: TaskTouchEventArg) => eventArg,
     taskTouchMove: (eventArg: TaskTouchEventArg) => eventArg,
+    taskDragStart: (eventArg: TaskDragEvent) => eventArg,
+    taskDrop: (eventArg: TaskDragEvent) => eventArg,
     clickTask: (id: number) => Number.isInteger(id),
     complete: (id: number) => Number.isInteger(id),
     delete: (id: number) => Number.isInteger(id)

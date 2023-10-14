@@ -17,7 +17,7 @@
 
     <TaskList
       v-if="filteredTasks.length > 0"
-      :tasks="filteredTasks"
+      :tasks="filteredTasks.sort((a, b) => a.order - b.order)"
       :selected="selected"
       @clickTask="clickTask"
       @complete="completeTask"
@@ -29,6 +29,8 @@
       @taskMouseMove="taskMouseMove"
       @taskTouchStart="taskTouchStart"
       @taskTouchMove="taskTouchMove"
+      @taskDragStart="taskDragStart"
+      @taskDrop="taskDrop"
     />        
     <div v-else class="mt-10 font-bold text-gray-400">Task list is empty</div>
     
@@ -60,6 +62,7 @@ import LampIcon from './components/icons/LampIcon.vue'
 import 'material-icons/iconfont/material-icons.css'
 import { type TaskMouseEventArg } from './types/TaskMouseEventArg'
 import { type TaskTouchEventArg } from './types/TaskTouchEventArg'
+import { type TaskDragEvent } from './types/TaskDragEvent'
 
 type Nullable<T> = T | null
 
@@ -124,7 +127,8 @@ export default defineComponent({
       const newTask = {
         id: Date.now(),
         text,
-        completed: false
+        completed: false,
+        order: Date.now()
       }
       this.tasks.push(newTask)
       localStorage.setItem(`${appName}.${tasksName}`, JSON.stringify(this.tasks))   
@@ -175,6 +179,22 @@ export default defineComponent({
           eventArg.event.changedTouches[0].clientX - this.taskTouchEvent.event.changedTouches[0].clientX > 50) {
         this.selected = this.getTaskId(eventArg.id)
       }    
+    },
+    taskDragStart (e: TaskDragEvent) {
+      let dataTransfer = e.event.dataTransfer as DataTransfer
+      dataTransfer.dropEffect = 'move'
+      dataTransfer.effectAllowed = 'move'
+      dataTransfer.setData('task', JSON.stringify(e.task))
+    },
+    taskDrop (e: TaskDragEvent) {    
+      let dataTransfer = e.event.dataTransfer as DataTransfer      
+      let movingTask = JSON.parse(dataTransfer.getData('task'))
+      movingTask = this.tasks.find(t => t.id === movingTask.id)
+      const movingTaskOrder = movingTask.order 
+      movingTask.order = e.task.order
+      e.task.order = movingTaskOrder
+      this.tasks = [...this.tasks]
+      localStorage.setItem(`${appName}.${tasksName}`, JSON.stringify(this.tasks))  
     },
     containerClick (evt: MouseEvent) {
       const target = evt.target as Element;
