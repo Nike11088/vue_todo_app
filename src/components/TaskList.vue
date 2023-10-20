@@ -1,6 +1,8 @@
 <template>
   <div 
-    ref="taskList" class="mt-10 sm:w-[550px] w-full px-[10px] max-h-[calc(100vh-310px)] scrollbar"   
+    ref="taskList" 
+    class="mt-10 sm:w-[550px] w-full px-[10px] max-h-[calc(100vh-195px)] scrollbar overflow-x-hidden"   
+    :class="{'h-[calc(100vh-195px)]': isMobile()}"
   >
     <TaskItem 
       v-for="task in tasks"
@@ -32,12 +34,14 @@ import { type Task } from '../types/Task'
 import { type TaskMouseEventArg } from '../types/TaskMouseEventArg'
 import { type TaskTouchEventArg } from '../types/TaskTouchEventArg'
 import { type TaskDragEvent } from '../types/TaskDragEvent'
+import { isMobile } from '../scripts/utils'
 
 type Nullable<T> = T | null
 
 interface State {
   tasksLength: number,
-  isTaskAdded: boolean
+  isTaskAdded: boolean,
+  isMobile: Function
 }
 
 export default defineComponent({ 
@@ -57,7 +61,8 @@ export default defineComponent({
   data () : State {
     return {
       tasksLength: 0,
-      isTaskAdded: false
+      isTaskAdded: false,
+      isMobile
     }
   },
   mounted () { 

@@ -1,6 +1,6 @@
 <template>
   <div 
-    class="flex flex-col items-center min-w-[350px] h-[100vh]"
+    class="flex flex-col items-center min-w-[350px] h-[100vh] w-[100vw]"
     @click="containerClick"
     @mouseup="containerMouseUp"
     @touchend="containerTouchEnd"
@@ -34,7 +34,11 @@
       @taskDragStart="taskDragStart"
       @taskDrop="taskDrop"
     />        
-    <div v-else class="mt-10 font-bold text-gray-400">Task list is empty</div>
+    <div 
+      v-else class="mt-10 font-bold text-gray-400"
+    >
+      Task list is empty
+    </div>
     
     <AddTaskButton 
       v-if="!addTaskFormVisible"
