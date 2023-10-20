@@ -2,6 +2,8 @@
   <div 
     class="flex flex-col items-center min-w-[350px] h-[100vh]"
     @click="containerClick"
+    @mouseup="containerMouseUp"
+    @touchend="containerTouchEnd"
   >    
     <div class="flex items-center mt-5 relative">
       <TaskFilter 
@@ -63,6 +65,7 @@ import 'material-icons/iconfont/material-icons.css'
 import { type TaskMouseEventArg } from './types/TaskMouseEventArg'
 import { type TaskTouchEventArg } from './types/TaskTouchEventArg'
 import { type TaskDragEvent } from './types/TaskDragEvent'
+import { isMobile } from './scripts/utils'
 
 type Nullable<T> = T | null
 
@@ -133,8 +136,8 @@ export default defineComponent({
       this.tasks.push(newTask)
       localStorage.setItem(`${appName}.${tasksName}`, JSON.stringify(this.tasks))   
     },
-    clickTask (id: number) {     
-      if (this.isMobile()) {
+    clickTask (id: number) {    
+      if (isMobile()) {
         if (this.selected === id) {
           this.selected = null
         } else {
@@ -155,19 +158,19 @@ export default defineComponent({
       localStorage.setItem(`${appName}.${tasksName}`, JSON.stringify(this.tasks))
     },
     taskMouseEnter (id: number) {     
-      if (!this.isMobile()) {
+      if (!isMobile()) {
         const selected = this.getTaskId(id)
         this.selected = this.selected === selected ? null : selected
       }      
     },
     taskMouseLeave () {      
-      if (!this.isMobile()) {
+      if (!isMobile()) {
         this.selected = null
       } 
     },
     taskMouseDown (eventArg: TaskMouseEventArg) {      
     }, 
-    taskMouseUp (eventArg: TaskMouseEventArg) {  
+    taskMouseUp (eventArg: TaskMouseEventArg) {        
     }, 
     taskMouseMove (eventArg: TaskMouseEventArg) {
     },
@@ -175,10 +178,13 @@ export default defineComponent({
       this.taskTouchEvent = event
     },
     taskTouchMove (eventArg: TaskTouchEventArg) {   
-      if (this.taskTouchEvent && this.taskTouchEvent?.id === eventArg.id &&
-          eventArg.event.changedTouches[0].clientX - this.taskTouchEvent.event.changedTouches[0].clientX > 50) {
-        this.selected = this.getTaskId(eventArg.id)
-      }    
+      if (this.taskTouchEvent && this.taskTouchEvent?.id === eventArg.id) {
+        const oldClientX = this.taskTouchEvent.event.changedTouches[0].clientX
+        const newClientX = eventArg.event.changedTouches[0].clientX
+        if (newClientX - oldClientX > 50) {
+          this.selected = this.getTaskId(eventArg.id)
+        }     
+      }  
     },
     taskDragStart (e: TaskDragEvent) {
       let dataTransfer = e.event.dataTransfer as DataTransfer
@@ -198,15 +204,18 @@ export default defineComponent({
     },
     containerClick (evt: MouseEvent) {
       const target = evt.target as Element;
-      if (this.isMobile() && !target.classList.contains('task-item')) {
+      if (isMobile() && !target.classList.contains('task-item')) {
         this.selected = null
       }
     },
+    containerMouseUp (evt: MouseEvent) {
+      console.log('mouse up', evt)
+    },
+    containerTouchEnd(evt: TouchEvent) {
+      console.log('containerTouchEnd', evt)
+    },
     getTaskId (id: number) {
       return this.tasks.find(t => t.id === id)?.id || null
-    },
-    isMobile () {
-      return /Android|iPhone/i.test(navigator.userAgent)
     },
     switchTheme () {
       if (this.darkTheme) {

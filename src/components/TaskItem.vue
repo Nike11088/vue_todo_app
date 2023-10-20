@@ -1,6 +1,8 @@
 <template>
   <div 
-    class="task-item flex justify-between items-center border-2 border-blue-700 rounded-xl w-full py-1 px-2 mb-2 text-black dark:text-white cursor-pointer"
+    ref="maintask"
+    class="task-item flex justify-between items-center border-2 border-blue-700 rounded-xl w-full py-1 px-2 mb-2 text-black dark:text-white cursor-pointer relative"
+    :draggable="true"
     @mouseenter="mouseEnter"    
     @mouseleave="mouseLeave"   
     @mousedown="mouseDown($event)"
@@ -8,6 +10,7 @@
     @mousemove="mouseMove($event)"
     @touchstart="touchStart($event)"
     @touchmove="touchMove($event)"
+    @touchend="touchEnd($event)"
     @click="clickTask" 
   >
     <div 
@@ -40,6 +43,41 @@
       </span> 
     </div>    
   </div> 
+
+  <!-- <div 
+    v-if="isMobile"
+    ref="task"
+    class="task-item justify-between items-center border-2 border-red-700 rounded-xl py-1 px-2 mb-2 text-black dark:text-white cursor-pointer hidden absolute" 
+  >
+    <div 
+      class="flex items-center"      
+    >
+      <div 
+        class="flex items-center w-[30px] h-[30px] mr-1"
+      >
+        <span 
+          v-if="task?.completed"
+          class="material-icons-round !text-3xl text-green-400 cursor-pointer"            
+        >
+          done
+        </span> 
+      </div>                    
+      <span
+        class="cursor-pointer"
+        :class="{'line-through': task.completed}"        
+      >
+        {{ task.text }}
+      </span>
+    </div> 
+    <div class="flex items-center w-[30px] h-[30px] mr-1">
+      <span  
+        v-if="selected"
+        class="material-icons-outlined !text-3xl ml-1 hover:text-red-400 text-red-600 cursor-pointer"
+      >
+        delete
+      </span> 
+    </div>    
+  </div>  -->
 </template>
 
 <script lang="ts">
@@ -47,6 +85,7 @@ import { type PropType, defineComponent } from 'vue'
 import { type Task } from '../types/Task'
 import { type TaskMouseEventArg } from '../types/TaskMouseEventArg'
 import { type TaskTouchEventArg } from '../types/TaskTouchEventArg'
+// import { isMobile } from '../scripts/utils'
 
 export default defineComponent({ 
   props: {
@@ -59,7 +98,28 @@ export default defineComponent({
       required: false
     }
   },
-  methods: {
+  // created () {
+  //   window.addEventListener('resize', this.onResize)
+  // },
+  // mounted () {    
+  //   const width = this.$refs.maintask.getBoundingClientRect().width
+  //   if (this.$refs.task) {
+  //     this.$refs.task.style.width = width + 'px'
+  //   }   
+  // },   
+  // beforeUnmount () {
+  //   () => window.removeEventListener('resize', this.onResize)
+  // },
+  methods: {    
+    // onResize () {
+    //   const width = this.$refs.maintask.getBoundingClientRect().width
+    //   if (this.$refs.task) {
+    //     this.$refs.task.style.width = width + 'px' 
+    //   }      
+    // },
+    // isMobile () {
+    //   return isMobile
+    // },
     mouseEnter () { 
       this.$emit('taskMouseEnter', this.task.id)
     },
@@ -79,10 +139,22 @@ export default defineComponent({
       this.$emit('taskTouchStart', { id: this.task.id, event })
     },
     touchMove (event: TouchEvent) {
-      this.$emit('taskTouchMove', { id: this.task.id, event })
+      // const newClientY = event.changedTouches[0].clientY
+      // if (this.$refs.task) {
+      //   this.$refs.task.classList.remove('hidden')
+      //   this.$refs.task.classList.add('flex')
+      //   this.$refs.task.style.top = newClientY + 'px'
+      // } 
+      this.$emit('taskTouchMove', { id: this.task.id, event })     
+    },
+    touchEnd (event: TouchEvent) {  
+      // if (this.$refs.task) {
+      //   this.$refs.task.classList.add('hidden')
+      //   this.$refs.task.classList.remove('flex')
+      // }       
     },
     completeTask () {    
-      // this.$emit('complete', this.task.id)
+      this.$emit('complete', this.task.id)
     },
     deleteTask () {
       this.$emit('delete', this.task.id)
