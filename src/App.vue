@@ -35,7 +35,9 @@
       @taskDrop="taskDrop"
     />        
     <div 
-      v-else class="mt-10 font-bold text-gray-400"
+      v-else 
+      class="mt-10 font-bold text-gray-400"
+      :class="{'h-[calc(100vh-195px)]': isMobile()}"
     >
       Task list is empty
     </div>
@@ -80,7 +82,8 @@ interface State {
   selected: Nullable<number>,
   darkTheme: boolean,
   taskTouchEvent: Nullable<TaskTouchEventArg>,
-  isTaskMouseDown: boolean
+  isTaskMouseDown: boolean,
+  isMobile: Function
 }
 
 const appName = 'todo-app'
@@ -117,7 +120,8 @@ export default defineComponent({
       selected: null,
       darkTheme: false,
       taskTouchEvent: null,
-      isTaskMouseDown: false
+      isTaskMouseDown: false,
+      isMobile
     }
   },
   methods: {
