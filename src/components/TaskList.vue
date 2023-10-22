@@ -1,8 +1,7 @@
 <template>
   <div 
     ref="taskList" 
-    class="mt-10 sm:w-[550px] w-full px-[10px] max-h-[calc(100vh-195px)] scrollbar overflow-x-hidden"   
-    :class="{'h-[calc(100vh-195px)]': isMobile()}"
+    class="mt-10 w-full sm:w-[540px] scrollbar scroll-m-2 overflow-x-hidden"   
   >
     <TaskItem 
       v-for="task in tasks"

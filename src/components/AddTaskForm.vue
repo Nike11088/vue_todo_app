@@ -1,9 +1,9 @@
 <template>
   <div 
-    class="px-[10px] sm:w-[550px] w-full"
+    class="w-full sm:w-[540px]"
     :class="{'hidden': !visible}"
   >
-    <div class="border-2 border-blue-700 rounded-xl mb-5 p-3 pt-1 pb-5">
+    <div class="border-2 border-blue-700 rounded-xl p-3 pt-1 pb-5">
       <div class="flex !justify-end mb-3" @click="close">
         <span class="material-icons-round !text-3xl ml-1 text-blue-600 hover:text-blue-400 hover:cursor-pointer">cancel</span>  
       </div>        

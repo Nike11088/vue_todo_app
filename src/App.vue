@@ -1,17 +1,19 @@
 <template>
   <div 
-    class="flex flex-col items-center min-w-[350px] h-[100vh] w-[100vw]"
+    class="flex flex-col items-center h-[100vh] min-w-[400px] mx-2"
     @click="containerClick"
     @mouseup="containerMouseUp"
     @touchend="containerTouchEnd"
   >    
-    <div class="flex items-center mt-5 relative">
+    <div class="flex items-center mt-2">
+      <div class="w-8 h-8">      
+      </div>
       <TaskFilter 
         :activeFilter="activeFilter" 
         @setFilter="setFilter"
       />  
       <LampIcon 
-        class="absolute top-[4px] right-[-40px] cursor-pointer" 
+        class="cursor-pointer mx-2" 
         :color="themeColor"
         @click="switchTheme"
       />       
@@ -36,20 +38,19 @@
     />        
     <div 
       v-else 
-      class="mt-10 font-bold text-gray-400"
-      :class="{'h-[calc(100vh-195px)]': isMobile()}"
+      class="mt-10 font-bold text-gray-400"      
     >
       Task list is empty
     </div>
     
     <AddTaskButton 
       v-if="!addTaskFormVisible"
-      class="mt-8" 
+      class="mt-8 mb-2" 
       @click="showAddTaskForm"
     />
 
     <AddTaskForm 
-      class="mt-8" 
+      class="mt-8 mb-2" 
       :visible="addTaskFormVisible" 
       @close="closeAddTaskForm"
       @addTask="addTask"

@@ -8,9 +8,7 @@ module.exports = {
     "./src/**/*.{html,js,css,vue}"
   ],
   theme: {
-    extend: {},
-    screens: {
-      "sm": "540px"
+    extend: {
     }
   },
   plugins: [
@@ -23,7 +21,7 @@ module.exports = {
         },
         '.scrollbar::-webkit-scrollbar': {
             height: '2px',
-            width: '2px',
+            width: '3px'
         },
         '.scrollbar::-webkit-scrollbar-thumb': {
             backgroundColor: theme('colors.blue.700'),

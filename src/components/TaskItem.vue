@@ -1,7 +1,7 @@
 <template>
   <div 
     ref="maintask"
-    class="task-item flex justify-between items-center border-2 border-blue-700 rounded-xl w-full py-1 px-2 mb-2 text-black dark:text-white cursor-pointer relative"
+    class="task-item flex justify-between items-center border-2 border-blue-700 rounded-xl py-1 px-2 mb-2 mr-[2px] text-black dark:text-white cursor-pointer relative"
     :draggable="true"
     @mouseenter="mouseEnter"    
     @mouseleave="mouseLeave"   
