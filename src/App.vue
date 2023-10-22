@@ -1,6 +1,6 @@
 <template>
   <div 
-    class="flex flex-col items-center h-[100vh] min-w-[400px] mx-2"
+    class="flex flex-col items-center h-[100vh] min-w-[400px] mx-2 overflow-hidden"
     @click="containerClick"
     @mouseup="containerMouseUp"
     @touchend="containerTouchEnd"
