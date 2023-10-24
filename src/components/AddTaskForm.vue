@@ -1,34 +1,39 @@
 <template>
-  <div 
+  <div
     class="w-full sm:w-[540px]"
-    :class="{'hidden': !visible}"
+    :class="{ hidden: !visible }"
   >
-    <div class="border-2 border-blue-700 rounded-xl p-3 pt-1 pb-5">
-      <div class="flex !justify-end mb-3" @click="close">
-        <span class="material-icons-round !text-3xl ml-1 text-blue-600 hover:text-blue-400 hover:cursor-pointer">cancel</span>  
-      </div>        
-      <input 
-        class="border-2 border-blue-600 outline-0 rounded-full w-full mb-5 px-2 py-[7px] dark:text-white bg-slate-200 dark:bg-slate-800"
+    <div class="rounded-xl border-2 border-blue-700 p-3 pb-5 pt-1">
+      <div
+        class="mb-3 flex !justify-end"
+        @click="close"
+      >
+        <span class="material-icons-round ml-1 !text-3xl text-blue-600 hover:cursor-pointer hover:text-blue-400"
+          >cancel</span
+        >
+      </div>
+      <input
+        class="mb-5 w-full rounded-full border-2 border-blue-600 bg-slate-200 px-2 py-[7px] outline-0 dark:bg-slate-800 dark:text-white"
         v-model="taskText"
-      > 
+      />
       <div class="flex justify-center">
-        <AddTaskButton @click="addTask" /> 
-      </div>            
+        <AddTaskButton @click="addTask" />
+      </div>
     </div>
-  </div> 
+  </div>
 </template>
 
 <script lang="ts">
 import AddTaskButton from './AddTaskButton.vue'
-import { type PropType, defineComponent } from 'vue'
+import { type PropType, defineComponent, ref } from 'vue'
 
-interface State {
-  taskText: string
-}
-
-export default defineComponent({ 
+export default defineComponent({
   components: {
     AddTaskButton
+  },
+  emits: {
+    close: () => true,
+    addTask: (text: string) => text
   },
   props: {
     visible: {
@@ -36,27 +41,26 @@ export default defineComponent({
       default: false
     }
   },
-  data () : State {
+  setup(props, { emit }) {
+    const taskText = ref('')
+
+    const addTask = () => {
+      if (taskText.value === '') return
+      emit('addTask', taskText.value)
+      taskText.value = ''
+    }
+
+    const close = () => {
+      emit('close')
+    }
+
     return {
-      taskText: ''
+      taskText,
+      addTask,
+      close
     }
-  },
-  methods: {
-    close () {
-      this.$emit('close')
-    },
-    addTask () {
-      if (this.taskText === '') return
-      this.$emit('addTask', this.taskText)
-      this.taskText = ''
-    }
-  },
-  emits: {
-    close: () => true,
-    addTask: (text: string) => text
   }
 })
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

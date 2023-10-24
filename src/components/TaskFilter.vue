@@ -1,28 +1,28 @@
 <template>
   <div>
-    <div class="flex justify-between items-center h-[40px]">
-      <button 
-        class="w-[110px] h-[40px] text-blue-600 font-medium border-2 border-blue-700 rounded-l-full border-r-0 active:bg-none hover:bg-blue-600"  
-        :class="{ 'text-white bg-blue-600': activeFilter === 'All' }"  
-        @click="setFilter('All')"    
+    <div class="flex h-[40px] items-center justify-between">
+      <button
+        class="h-[40px] w-[110px] rounded-l-full border-2 border-r-0 border-blue-700 font-medium text-blue-600 hover:bg-blue-600 active:bg-none"
+        :class="{ 'bg-blue-600 text-white': activeFilter === 'All' }"
+        @click="setFilter('All')"
       >
         All
       </button>
-      <button 
-        class="w-[110px] h-[40px] text-blue-600 font-medium border-2 border-blue-700 active:bg-none hover:bg-blue-600 hover:text-white border-lr-2"
-        :class="{ 'text-white bg-blue-600': activeFilter === 'Active' }" 
-        @click="setFilter('Active')"  
+      <button
+        class="border-lr-2 h-[40px] w-[110px] border-2 border-blue-700 font-medium text-blue-600 hover:bg-blue-600 hover:text-white active:bg-none"
+        :class="{ 'bg-blue-600 text-white': activeFilter === 'Active' }"
+        @click="setFilter('Active')"
       >
         Active
       </button>
-      <button 
-        class="w-[110px] h-[40px]  text-blue-600 font-medium border-2 border-blue-700 active:bg-none hover:bg-blue-600 hover:text-white rounded-r-full border-l-0"
-        :class="{ 'text-white bg-blue-600': activeFilter === 'Done' }"  
-        @click="setFilter('Done')" 
+      <button
+        class="h-[40px] w-[110px] rounded-r-full border-2 border-l-0 border-blue-700 font-medium text-blue-600 hover:bg-blue-600 hover:text-white active:bg-none"
+        :class="{ 'bg-blue-600 text-white': activeFilter === 'Done' }"
+        @click="setFilter('Done')"
       >
         Done
       </button>
-    </div> 
+    </div>
   </div>
 </template>
 
@@ -30,31 +30,23 @@
 import { type PropType, defineComponent } from 'vue'
 import { type Filter } from '../types/Filter'
 
-interface State {
-  filters: Filter[]
-}
-
-export default defineComponent({ 
+export default defineComponent({
   props: {
     activeFilter: {
       type: String as PropType<Filter>
     }
   },
-  data(): State {
-    return {
-      filters: ['All', 'Active', 'Done']
-    }
-  },
-  methods: {
-    setFilter (filter : Filter) {
-      this.$emit('setFilter', filter)
-    }
-  },
   emits: {
     setFilter: (filter: Filter) => filter
+  },
+  setup(props, { emit }) {
+    const setFilter = (filter: Filter) => emit('setFilter', filter)
+
+    return {
+      setFilter
+    }
   }
 })
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

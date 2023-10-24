@@ -5,7 +5,7 @@
     @mouseup="containerMouseUp"
     @touchend="containerTouchEnd"
   >
-    <div class="mt-2 flex items-center">
+    <div class="mt-5 flex items-center">
       <div class="h-8 w-8"></div>
       <TaskFilter
         :activeFilter="activeFilter"
@@ -218,12 +218,8 @@ export default defineComponent({
         this.selected = null
       }
     },
-    containerMouseUp(evt: MouseEvent) {
-      console.log('mouse up', evt)
-    },
-    containerTouchEnd(evt: TouchEvent) {
-      console.log('containerTouchEnd', evt)
-    },
+    containerMouseUp(evt: MouseEvent) {},
+    containerTouchEnd(evt: TouchEvent) {},
     getTaskId(id: number) {
       return this.tasks.find((t) => t.id === id)?.id || null
     },
