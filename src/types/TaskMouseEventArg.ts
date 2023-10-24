@@ -1,4 +1,4 @@
 export interface TaskMouseEventArg {
-  id: number,
+  id: number
   clientX: number
 }

@@ -1,9 +1,6 @@
 <template>
-  <div 
-    ref="taskList" 
-    class="mt-10 w-full sm:w-[540px] scrollbar scroll-m-2 overflow-x-hidden"   
-  >
-    <TaskItem 
+  <div ref="taskList" class="mt-10 w-full sm:w-[540px] scrollbar scroll-m-2 overflow-x-hidden">
+    <TaskItem
       v-for="task in tasks"
       :key="task.id"
       :task="task"
@@ -23,7 +20,7 @@
       @complete="completeTask"
       @delete="deleteTask"
     />
-  </div> 
+  </div>
 </template>
 
 <script lang="ts">
@@ -38,12 +35,12 @@ import { isMobile } from '../scripts/utils'
 type Nullable<T> = T | null
 
 interface State {
-  tasksLength: number,
-  isTaskAdded: boolean,
+  tasksLength: number
+  isTaskAdded: boolean
   isMobile: Function
 }
 
-export default defineComponent({ 
+export default defineComponent({
   components: {
     TaskItem
   },
@@ -57,69 +54,69 @@ export default defineComponent({
       default: null
     }
   },
-  data () : State {
+  data(): State {
     return {
       tasksLength: 0,
       isTaskAdded: false,
       isMobile
     }
   },
-  mounted () { 
-    this.tasksLength = this.tasks.length 
+  mounted() {
+    this.tasksLength = this.tasks.length
   },
-  updated () {
+  updated() {
     if (this.isTaskAdded) {
       this.isTaskAdded = false
       const el = this.$refs.taskList as HTMLElement
       el.scrollTop = el.scrollHeight
-    }    
+    }
   },
   watch: {
     tasks: {
       handler: function () {
         if (this.tasks?.length > this.tasksLength) {
           this.isTaskAdded = true
-        }     
-        this.tasksLength = this.tasks.length  
+        }
+        this.tasksLength = this.tasks.length
       },
       deep: true
     }
   },
   methods: {
-    clickTask (id: number) {
+    clickTask(id: number) {
       this.$emit('clickTask', id)
     },
-    completeTask (id: number) {
+    completeTask(id: number) {
       this.$emit('complete', id)
     },
-    deleteTask (id: number) {
+    deleteTask(id: number) {
       this.$emit('delete', id)
     },
-    taskMouseEnter (id: number) {
+    taskMouseEnter(id: number) {
       this.$emit('taskMouseEnter', id)
     },
-    taskMouseLeave (id: number) {
+    taskMouseLeave(id: number) {
       this.$emit('taskMouseLeave', id)
     },
-    taskMouseDown (eventArg: TaskMouseEventArg) {
+    taskMouseDown(eventArg: TaskMouseEventArg) {
       this.$emit('taskMouseDown', eventArg)
-    }, 
-    taskMouseUp (eventArg: TaskMouseEventArg) {
+    },
+    taskMouseUp(eventArg: TaskMouseEventArg) {
       this.$emit('taskMouseUp', eventArg)
-    }, 
-    taskMouseMove (eventArg: TaskMouseEventArg) {
+    },
+    taskMouseMove(eventArg: TaskMouseEventArg) {
       this.$emit('taskMouseMove', eventArg)
     },
-    taskTouchStart (event: TaskTouchEventArg) {
+    taskTouchStart(event: TaskTouchEventArg) {
       this.$emit('taskTouchStart', event)
     },
-    taskTouchMove (event: TaskTouchEventArg) {
+    taskTouchMove(event: TaskTouchEventArg) {
       this.$emit('taskTouchMove', event)
     },
-    dragStart (event: DragEvent, task: Task) {
+    dragStart(event: DragEvent, task: Task) {
       this.$emit('taskDragStart', { event, task })
     },
-    drop (event: DragEvent, task: Task) {
+    drop(event: DragEvent, task: Task) {
       this.$emit('taskDrop', { event, task })
     }
   },
@@ -140,5 +137,4 @@ export default defineComponent({
 })
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

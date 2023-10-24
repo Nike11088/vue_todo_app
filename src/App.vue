@@ -1,23 +1,22 @@
 <template>
-  <div 
-    class="flex flex-col items-center h-[100vh] min-w-[400px] mx-2 overflow-hidden"
+  <div
+    class="mx-2 flex h-[100vh] min-w-[400px] flex-col items-center overflow-hidden"
     @click="containerClick"
     @mouseup="containerMouseUp"
     @touchend="containerTouchEnd"
-  >    
-    <div class="flex items-center mt-2">
-      <div class="w-8 h-8">      
-      </div>
-      <TaskFilter 
-        :activeFilter="activeFilter" 
+  >
+    <div class="mt-2 flex items-center">
+      <div class="h-8 w-8"></div>
+      <TaskFilter
+        :activeFilter="activeFilter"
         @setFilter="setFilter"
-      />  
-      <LampIcon 
-        class="cursor-pointer mx-2" 
+      />
+      <LampIcon
+        class="mx-2 cursor-pointer"
         :color="themeColor"
         @click="switchTheme"
-      />       
-    </div>  
+      />
+    </div>
 
     <TaskList
       v-if="filteredTasks.length > 0"
@@ -35,27 +34,27 @@
       @taskTouchMove="taskTouchMove"
       @taskDragStart="taskDragStart"
       @taskDrop="taskDrop"
-    />        
-    <div 
-      v-else 
-      class="mt-10 font-bold text-gray-400"      
+    />
+    <div
+      v-else
+      class="mt-10 font-bold text-gray-400"
     >
       Task list is empty
     </div>
-    
-    <AddTaskButton 
+
+    <AddTaskButton
       v-if="!addTaskFormVisible"
-      class="mt-8 mb-2" 
+      class="mb-2 mt-8"
       @click="showAddTaskForm"
     />
 
-    <AddTaskForm 
-      class="mt-8 mb-2" 
-      :visible="addTaskFormVisible" 
+    <AddTaskForm
+      class="mb-2 mt-8"
+      :visible="addTaskFormVisible"
       @close="closeAddTaskForm"
       @addTask="addTask"
     />
-  </div> 
+  </div>
 </template>
 
 <script lang="ts">
@@ -77,13 +76,13 @@ import { isMobile } from './scripts/utils'
 type Nullable<T> = T | null
 
 interface State {
-  activeFilter: Filter,
-  tasks: Task[],
-  addTaskFormVisible: boolean,
-  selected: Nullable<number>,
-  darkTheme: boolean,
-  taskTouchEvent: Nullable<TaskTouchEventArg>,
-  isTaskMouseDown: boolean,
+  activeFilter: Filter
+  tasks: Task[]
+  addTaskFormVisible: boolean
+  selected: Nullable<number>
+  darkTheme: boolean
+  taskTouchEvent: Nullable<TaskTouchEventArg>
+  isTaskMouseDown: boolean
   isMobile: Function
 }
 
@@ -99,8 +98,13 @@ export default defineComponent({
     AddTaskForm,
     LampIcon
   },
-  created () {
-    if (localStorage['todo-app.theme'] === 'dark' || (localStorage[`${appName}.${themeName}`] !== 'light' && (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches))) {
+  created() {
+    if (
+      localStorage['todo-app.theme'] === 'dark' ||
+      (localStorage[`${appName}.${themeName}`] !== 'light' &&
+        !('theme' in localStorage) &&
+        window.matchMedia('(prefers-color-scheme: dark)').matches)
+    ) {
       document.documentElement.classList.add('dark')
       this.darkTheme = true
     } else {
@@ -111,9 +115,9 @@ export default defineComponent({
     const tasks = localStorage.getItem(`${appName}.${tasksName}`)
     if (tasks) {
       this.tasks = JSON.parse(tasks)
-    } 
+    }
   },
-  data () : State {
+  data(): State {
     return {
       activeFilter: 'All',
       tasks: [],
@@ -126,16 +130,16 @@ export default defineComponent({
     }
   },
   methods: {
-    setFilter (filter : Filter) {
+    setFilter(filter: Filter) {
       this.activeFilter = filter
     },
-    showAddTaskForm () {
+    showAddTaskForm() {
       this.addTaskFormVisible = true
     },
-    closeAddTaskForm () {
+    closeAddTaskForm() {
       this.addTaskFormVisible = false
     },
-    addTask (text: string) {
+    addTask(text: string) {
       const newTask = {
         id: Date.now(),
         text,
@@ -143,9 +147,9 @@ export default defineComponent({
         order: Date.now()
       }
       this.tasks.push(newTask)
-      localStorage.setItem(`${appName}.${tasksName}`, JSON.stringify(this.tasks))   
+      localStorage.setItem(`${appName}.${tasksName}`, JSON.stringify(this.tasks))
     },
-    clickTask (id: number) {    
+    clickTask(id: number) {
       if (isMobile()) {
         if (this.selected === id) {
           this.selected = null
@@ -154,79 +158,76 @@ export default defineComponent({
         }
       } else {
         this.completeTask(id)
-      }     
+      }
     },
-    completeTask (id: number) {
-      const task = this.tasks.find(t => t.id === id) 
-      if (!task) return     
+    completeTask(id: number) {
+      const task = this.tasks.find((t) => t.id === id)
+      if (!task) return
       task.completed = !task.completed
       localStorage.setItem(`${appName}.${tasksName}`, JSON.stringify(this.tasks))
     },
-    deleteTask (id: number) {
-      this.tasks = this.tasks.filter(t => t.id !== id)
+    deleteTask(id: number) {
+      this.tasks = this.tasks.filter((t) => t.id !== id)
       localStorage.setItem(`${appName}.${tasksName}`, JSON.stringify(this.tasks))
     },
-    taskMouseEnter (id: number) {     
+    taskMouseEnter(id: number) {
       if (!isMobile()) {
         const selected = this.getTaskId(id)
         this.selected = this.selected === selected ? null : selected
-      }      
+      }
     },
-    taskMouseLeave () {      
+    taskMouseLeave() {
       if (!isMobile()) {
         this.selected = null
-      } 
+      }
     },
-    taskMouseDown (eventArg: TaskMouseEventArg) {      
-    }, 
-    taskMouseUp (eventArg: TaskMouseEventArg) {        
-    }, 
-    taskMouseMove (eventArg: TaskMouseEventArg) {
-    },
-    taskTouchStart (event: TaskTouchEventArg) {      
+    taskMouseDown(eventArg: TaskMouseEventArg) {},
+    taskMouseUp(eventArg: TaskMouseEventArg) {},
+    taskMouseMove(eventArg: TaskMouseEventArg) {},
+    taskTouchStart(event: TaskTouchEventArg) {
       this.taskTouchEvent = event
     },
-    taskTouchMove (eventArg: TaskTouchEventArg) {   
+    taskTouchMove(eventArg: TaskTouchEventArg) {
       if (this.taskTouchEvent && this.taskTouchEvent?.id === eventArg.id) {
         const oldClientX = this.taskTouchEvent.event.changedTouches[0].clientX
         const newClientX = eventArg.event.changedTouches[0].clientX
         if (newClientX - oldClientX > 50) {
           this.selected = this.getTaskId(eventArg.id)
-        }     
-      }  
+        }
+      }
     },
-    taskDragStart (e: TaskDragEvent) {
+    taskDragStart(e: TaskDragEvent) {
       let dataTransfer = e.event.dataTransfer as DataTransfer
       dataTransfer.dropEffect = 'move'
       dataTransfer.effectAllowed = 'move'
       dataTransfer.setData('task', JSON.stringify(e.task))
     },
-    taskDrop (e: TaskDragEvent) {    
-      let dataTransfer = e.event.dataTransfer as DataTransfer      
+    taskDrop(e: TaskDragEvent) {
+      let dataTransfer = e.event.dataTransfer as DataTransfer
       let movingTask = JSON.parse(dataTransfer.getData('task'))
-      movingTask = this.tasks.find(t => t.id === movingTask.id)
-      const movingTaskOrder = movingTask.order 
+      movingTask = this.tasks.find((t) => t.id === movingTask.id)
+      const movingTaskOrder = movingTask.order
       movingTask.order = e.task.order
       e.task.order = movingTaskOrder
       this.tasks = [...this.tasks]
-      localStorage.setItem(`${appName}.${tasksName}`, JSON.stringify(this.tasks))  
+      localStorage.setItem(`${appName}.${tasksName}`, JSON.stringify(this.tasks))
     },
-    containerClick (evt: MouseEvent) {
-      const target = evt.target as Element;
+    containerClick(evt: MouseEvent) {
+      const target = evt.target as Element
       if (isMobile() && !target.classList.contains('task-item')) {
         this.selected = null
       }
     },
-    containerMouseUp (evt: MouseEvent) {
+    containerMouseUp(evt: MouseEvent) {
       console.log('mouse up', evt)
     },
     containerTouchEnd(evt: TouchEvent) {
       console.log('containerTouchEnd', evt)
     },
-    getTaskId (id: number) {
-      return this.tasks.find(t => t.id === id)?.id || null
+    getTaskId(id: number) {
+      return this.tasks.find((t) => t.id === id)?.id || null
     },
-    switchTheme () {
+    switchTheme() {
       if (this.darkTheme) {
         document.documentElement.classList.remove('dark')
         localStorage.setItem(`${appName}.${themeName}`, 'light')
@@ -239,23 +240,22 @@ export default defineComponent({
     }
   },
   computed: {
-    filteredTasks () {
-      switch (this.activeFilter) {       
+    filteredTasks() {
+      switch (this.activeFilter) {
         case 'Active':
-          return this.tasks.filter(t => !t.completed)
+          return this.tasks.filter((t) => !t.completed)
         case 'Done':
-          return this.tasks.filter(t => t.completed)
+          return this.tasks.filter((t) => t.completed)
         case 'All':
         default:
           return this.tasks
       }
     },
-    themeColor () {
+    themeColor() {
       return this.darkTheme ? 'text-amber-300' : 'text-slate-600'
     }
   }
 })
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

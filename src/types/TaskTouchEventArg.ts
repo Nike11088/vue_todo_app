@@ -1,4 +1,4 @@
 export interface TaskTouchEventArg {
-  id: number,
+  id: number
   event: TouchEvent
 }
